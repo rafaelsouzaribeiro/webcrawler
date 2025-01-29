@@ -19,7 +19,7 @@ func main() {
 	}
 
 	receive := make(chan string)
-	go web.GetElementsByTag(doc, "a", receive)
+	go web.GetElementsByTag(doc, "a", "href", receive)
 
 	for element := range receive {
 		println(element)
