@@ -2,14 +2,13 @@ package connection
 
 import (
 	"database/sql"
-	"log"
 )
 
-func GetSqliteDataBase(filepath string) *sql.DB {
+func GetSqliteDataBase(filepath string) (*sql.DB, error) {
 	db, err := sql.Open("sqlite3", filepath)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
-	return db
+	return db, nil
 }

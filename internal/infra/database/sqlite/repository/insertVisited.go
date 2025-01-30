@@ -1,19 +1,17 @@
 package repository
 
-import (
-	"log"
-)
-
-func (q *Isqlite) InsertVisitedPage(url string) {
+func (q *Isqlite) InsertVisitedPage(url string) error {
 	insertPageSQL := `INSERT INTO visited_pages(url) VALUES (?)`
 	statement, err := q.Db.Prepare(insertPageSQL)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	defer statement.Close()
 
 	_, err = statement.Exec(url)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
+
+	return nil
 }
