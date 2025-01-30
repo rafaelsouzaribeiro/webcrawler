@@ -1,9 +1,16 @@
 package crawler
 
+import "strings"
+
 func InitCrawler(url string, receive chan string) {
 
 	reader, err := GetBody(url)
-	defer (*reader).Close()
+
+	defer func() {
+		if reader != nil {
+			(*reader).Close()
+		}
+	}()
 
 	if err != nil {
 		panic(err)
@@ -16,4 +23,13 @@ func InitCrawler(url string, receive chan string) {
 	}
 
 	go GetElementsByTag(doc, "a", "href", receive)
+
+	go func() {
+		for element := range receive {
+			if strings.HasPrefix(element, "http://") || strings.HasPrefix(element, "https://") {
+				InitCrawler(element, receive)
+			}
+		}
+	}()
+
 }
