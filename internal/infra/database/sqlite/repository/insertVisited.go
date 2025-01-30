@@ -1,13 +1,12 @@
-package sqlite
+package repository
 
 import (
-	"database/sql"
 	"log"
 )
 
-func InsertVisitedPage(db *sql.DB, url string) {
+func (q *Isqlite) InsertVisitedPage(url string) {
 	insertPageSQL := `INSERT INTO visited_pages(url) VALUES (?)`
-	statement, err := db.Prepare(insertPageSQL)
+	statement, err := q.Db.Prepare(insertPageSQL)
 	if err != nil {
 		log.Fatal(err)
 	}
