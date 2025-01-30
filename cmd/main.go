@@ -1,25 +1,11 @@
 package main
 
-import (
-	"github.com/rafaelsouzaribeiro/webcrawler/internal/infra/web"
-)
+import "github.com/rafaelsouzaribeiro/webcrawler/internal/infra/crawler"
 
 func main() {
-	reader, err := web.GetBody("https://www.google.com")
-	defer (*reader).Close()
-
-	if err != nil {
-		panic(err)
-	}
-
-	doc, err := web.DocumentReader(reader)
-
-	if err != nil {
-		panic(err)
-	}
-
 	receive := make(chan string)
-	go web.GetElementsByTag(doc, "a", "href", receive)
+
+	crawler.InitCrawler("https://www.google.com", receive)
 
 	for element := range receive {
 		println(element)
