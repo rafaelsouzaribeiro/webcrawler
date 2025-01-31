@@ -1,4 +1,4 @@
-package crawler
+package usecase
 
 import (
 	"io"
@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func GetBody(url string) (*io.ReadCloser, error) {
+func (u *SqlUsecase) GetBody(url string) (*io.ReadCloser, error) {
 	res, err := http.Get(url)
 	if err != nil {
 		return nil, err

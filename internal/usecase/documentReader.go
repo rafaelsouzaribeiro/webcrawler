@@ -1,4 +1,4 @@
-package crawler
+package usecase
 
 import (
 	"io"
@@ -6,7 +6,7 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
-func DocumentReader(body *io.ReadCloser) (*goquery.Document, error) {
+func (u *SqlUsecase) DocumentReader(body *io.ReadCloser) (*goquery.Document, error) {
 	doc, err := goquery.NewDocumentFromReader(*body)
 	if err != nil {
 		return nil, err

@@ -1,10 +1,12 @@
 package crawler
 
-import "strings"
+import (
+	"strings"
+)
 
-func InitCrawler(url string, receive chan string) {
+func (r *Usecasse) InitCrawler(url string, receive chan string) {
 
-	reader, err := GetBody(url)
+	reader, err := r.usecase.GetBody(url)
 
 	defer func() {
 		if reader != nil {
@@ -16,18 +18,18 @@ func InitCrawler(url string, receive chan string) {
 		panic(err)
 	}
 
-	doc, err := DocumentReader(reader)
+	doc, err := r.usecase.DocumentReader(reader)
 
 	if err != nil {
 		panic(err)
 	}
 
-	go GetElementsByTag(doc, "a", "href", receive)
+	go r.usecase.GetElementsByTag(doc, "a", "href", receive)
 
 	go func() {
 		for element := range receive {
 			if strings.HasPrefix(element, "http://") || strings.HasPrefix(element, "https://") {
-				InitCrawler(element, receive)
+				r.InitCrawler(element, receive)
 			}
 		}
 	}()

@@ -1,8 +1,8 @@
-package crawler
+package usecase
 
 import "github.com/PuerkitoBio/goquery"
 
-func GetElementsByTag(doc *goquery.Document, tag string, condition string, receive chan<- string) {
+func (u *SqlUsecase) GetElementsByTag(doc *goquery.Document, tag string, condition string, receive chan<- string) {
 	doc.Find(tag).Each(func(index int, item *goquery.Selection) {
 		switch condition {
 		case "text":
