@@ -5,7 +5,6 @@ import (
 )
 
 func (r *Usecasse) InitCrawler(url string, receive chan string) {
-
 	reader, err := r.usecase.GetBody(url)
 
 	defer func() {
@@ -29,6 +28,7 @@ func (r *Usecasse) InitCrawler(url string, receive chan string) {
 	go func() {
 		for element := range receive {
 			if strings.HasPrefix(element, "http://") || strings.HasPrefix(element, "https://") {
+				r.usecase.Repository.InsertVisitedPage(element)
 				r.InitCrawler(element, receive)
 			}
 		}

@@ -9,13 +9,14 @@ import (
 func main() {
 	receive := make(chan string)
 
-	db, err := connection.GetSqliteDataBase("")
+	db, err := connection.GetSqliteDataBase("database.db")
 
 	if err != nil {
 		panic(err)
 	}
 
 	usecase := di.NewSqlUseCase(db)
+	usecase.Repository.CreateTable()
 	execute := crawler.NewCrawler(usecase)
 	execute.InitCrawler("https://ge.globo.com/", receive)
 
