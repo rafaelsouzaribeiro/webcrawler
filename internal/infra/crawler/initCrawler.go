@@ -29,6 +29,9 @@ func (r *Usecasse) InitCrawler(url string, receive chan string) {
 	go func() {
 		for element := range receive {
 			if strings.HasPrefix(element, "http://") || strings.HasPrefix(element, "https://") {
+				if visited, _ := r.usecase.IsPageVisited(element); visited {
+					continue
+				}
 				r.usecase.Repository.InsertVisitedPage(element)
 				r.InitCrawler(element, receive)
 			}
