@@ -5,6 +5,7 @@ import (
 )
 
 func (r *Usecasse) InitCrawler(url string, receive chan string) {
+	r.usecase.CreateTable()
 	reader, err := r.usecase.GetBody(url)
 
 	defer func() {

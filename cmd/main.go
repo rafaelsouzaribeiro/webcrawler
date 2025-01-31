@@ -16,7 +16,6 @@ func main() {
 	}
 
 	usecase := di.NewSqlUseCase(db)
-	usecase.Repository.CreateTable()
 	execute := crawler.NewCrawler(usecase)
 	execute.InitCrawler("https://ge.globo.com/", receive)
 
