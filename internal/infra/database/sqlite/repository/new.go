@@ -2,8 +2,6 @@ package repository
 
 import (
 	"database/sql"
-
-	_ "modernc.org/sqlite"
 )
 
 type Isqlite struct {
