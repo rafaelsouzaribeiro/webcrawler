@@ -32,7 +32,7 @@ func (r *Usecasse) InitCrawler(url string, receive chan string) {
 				if visited, _ := r.usecase.IsPageVisited(element); visited {
 					continue
 				}
-				r.usecase.Repository.InsertVisitedPage(element)
+				r.usecase.InsertVisitedPage(element)
 				r.InitCrawler(element, receive)
 			}
 		}
