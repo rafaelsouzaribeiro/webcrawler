@@ -1,13 +1,28 @@
 package usecase
 
 import (
+	"crypto/tls"
 	"io"
 	"log"
 	"net/http"
 )
 
-func (u *SqlUsecase) GetBody(url string) (*io.ReadCloser, error) {
-	res, err := http.Get(url)
+func (u *SqlUsecase) GetBody(url string, tsl bool) (*io.ReadCloser, error) {
+	var res *http.Response
+	var err error
+
+	if tsl {
+		httpClient := &http.Client{
+			Transport: &http.Transport{
+				TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+			},
+		}
+		res, err = httpClient.Get(url)
+
+	} else {
+		res, err = http.Get(url)
+	}
+
 	if err != nil {
 		return nil, err
 	}
