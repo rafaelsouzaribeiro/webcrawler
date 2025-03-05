@@ -7,11 +7,11 @@ import (
 	"net/http"
 )
 
-func (u *SqlUsecase) GetBody(url string, tsl bool) (*io.ReadCloser, error) {
+func (u *SqlUsecase) GetBody(url string, tlsCond bool) (*io.ReadCloser, error) {
 	var res *http.Response
 	var err error
 
-	if tsl {
+	if tlsCond {
 		httpClient := &http.Client{
 			Transport: &http.Transport{
 				TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
