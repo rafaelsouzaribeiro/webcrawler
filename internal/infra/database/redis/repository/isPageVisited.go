@@ -3,14 +3,9 @@ package repository
 import "fmt"
 
 func (r *Iredis) IsPageVisited(url string) (bool, error) {
-	val, err := r.Db.Get(ctx, url).Result()
+	exists, err := r.Db.SIsMember(ctx, "sites", url).Result()
 	if err != nil {
-		return false, fmt.Errorf("failed to get key %s: %w", url, err)
+		return false, fmt.Errorf("failed to check if url %s is in set: %w", url, err)
 	}
-
-	if val == "" {
-		return false, nil
-	}
-
-	return true, nil
+	return exists, nil
 }
