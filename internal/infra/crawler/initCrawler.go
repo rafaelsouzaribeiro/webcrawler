@@ -42,7 +42,7 @@ func (r *Usecasse) InitCrawler(url string, receive chan string) {
 			wg.Add(1)
 			go func(element string) {
 				r.usecase.InsertVisitedPage(element)
-				producer.Producer(element, "crawler", "localhost:6379")
+				producer.Producer(element, "crawler_broker", "localhost:6379")
 				wg.Done()
 			}(element)
 

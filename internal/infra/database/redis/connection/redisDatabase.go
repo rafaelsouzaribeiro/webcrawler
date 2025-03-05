@@ -1,14 +1,15 @@
 package connection
 
 import (
+	"fmt"
+
 	"github.com/redis/go-redis/v9"
 )
 
-func NewRedisClient(addr, password string, db int) *redis.Client {
+func ConnectingRedis(host string, port int, password string) *redis.Client {
 	rdb := redis.NewClient(&redis.Options{
-		Addr:     addr,
+		Addr:     fmt.Sprintf("%s:%d", host, port),
 		Password: password,
-		DB:       db,
 	})
 
 	return rdb
