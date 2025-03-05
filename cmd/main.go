@@ -33,6 +33,4 @@ func main() {
 
 	close(channelConsumer)
 
-	select {}
-
 }
