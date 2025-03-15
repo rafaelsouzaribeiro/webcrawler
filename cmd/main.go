@@ -7,6 +7,7 @@ import (
 	"github.com/rafaelsouzaribeiro/webcrawler/internal/infra/crawler"
 	"github.com/rafaelsouzaribeiro/webcrawler/internal/infra/database/redis/connection"
 	"github.com/rafaelsouzaribeiro/webcrawler/internal/infra/di"
+	"github.com/rafaelsouzaribeiro/webcrawler/pkg/log"
 	"github.com/rafaelsouzaribeiro/webcrawler/pkg/redis/consumer"
 )
 
@@ -14,6 +15,7 @@ func main() {
 	receive := make(chan string)
 	channelConsumer := make(chan payload.Message)
 
+	log.CreateFileLog()
 	// db, err := connection.GetSqliteDataBase("database.db")
 
 	// if err != nil {
