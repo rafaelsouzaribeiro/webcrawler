@@ -1,34 +1,22 @@
 package usecase
 
 import (
-	"crypto/tls"
+	"errors"
+	"fmt"
 	"io"
-	"log"
 	"net/http"
 )
 
-func (u *SqlUsecase) GetBody(url string, tlsCond bool) (*io.ReadCloser, error) {
-	var res *http.Response
-	var err error
+func (u *SqlUsecase) GetBody(url string) (*io.ReadCloser, error) {
 
-	if tlsCond {
-		httpClient := &http.Client{
-			Transport: &http.Transport{
-				TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-			},
-		}
-		res, err = httpClient.Get(url)
-
-	} else {
-		res, err = http.Get(url)
-	}
+	res, err := http.Get(url)
 
 	if err != nil {
 		return nil, err
 	}
 
 	if res.StatusCode != 200 {
-		log.Fatalf("Erro ao acessar a página: %d %s", res.StatusCode, res.Status)
+		return nil, errors.New(fmt.Sprintf("status code error: %d %s", res.StatusCode, res.Status))
 	}
 
 	return &res.Body, nil

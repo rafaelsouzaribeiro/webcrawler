@@ -1,19 +1,32 @@
 package crawler
 
 import (
+	"net/url"
 	"strings"
 	"sync"
 
+	"github.com/rafaelsouzaribeiro/webcrawler/pkg/log"
 	"github.com/rafaelsouzaribeiro/webcrawler/pkg/redis/producer"
 )
 
-func (r *Usecasse) InitCrawler(url string, receive chan string) {
+var scheme, domain string
+
+func (r *Usecasse) InitCrawler(urlRaw string, receive chan string) {
 	r.usecase.CreateTable()
-	var cond bool = false
-	if strings.HasPrefix(url, "https://") {
-		cond = true
+
+	if !strings.HasPrefix(urlRaw, "https://") && !strings.HasPrefix(urlRaw, "http://") {
+		urlRaw = scheme + "://" + domain + urlRaw
+	} else {
+		parsedURL, err := url.Parse(urlRaw)
+		if err != nil {
+			log.Log.Printf("Error to parse url: %v", err)
+		}
+
+		scheme = parsedURL.Scheme
+		domain = parsedURL.Host
 	}
-	reader, err := r.usecase.GetBody(url, cond)
+
+	reader, err := r.usecase.GetBody(urlRaw)
 
 	defer func() {
 		if reader != nil {
@@ -22,13 +35,15 @@ func (r *Usecasse) InitCrawler(url string, receive chan string) {
 	}()
 
 	if err != nil {
-		panic(err)
+		log.Log.Printf("Error to get body: %v", err)
+		return
 	}
 
 	doc, err := r.usecase.DocumentReader(reader)
 
 	if err != nil {
-		panic(err)
+		log.Log.Printf("Error to get reader: %v", err)
+		return
 	}
 
 	go r.usecase.GetElementsByTag(doc, "a", "href", receive)
